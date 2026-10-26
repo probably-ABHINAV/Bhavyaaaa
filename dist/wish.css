@@ -14,6 +14,18 @@
 .wish-button:focus-visible { outline: 2px solid #eee9df; outline-offset: 5px; }
 .wish-response { min-height: 35px; padding-top: 17px; }
 .wish-response-text { display: block; font-size: 10px; line-height: 1.5; letter-spacing: .025em; color: #a29a8b; transition: color .6s; }
+.wish-announcement { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.wish-ticket { position: relative; width: 100%; max-width: 410px; margin-top: 21px; padding: 21px 23px 9px; border: 1px solid #fff5df70; border-radius: 3px; background: linear-gradient(130deg, #f4ecdd, #e9ddc6); color: #352a22; text-align: left; box-shadow: 0 9px 30px #00000024; animation: wish-ticket-reveal .5s ease both; }
+.wish-ticket[hidden] { display: none !important; }
+.wish-ticket-header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 7px 15px; align-items: center; padding-bottom: 16px; border-bottom: 1px solid #8c725526; color: #8e5847; font-size: 7px; font-weight: 600; line-height: 1.5; letter-spacing: .12em; }
+.wish-ticket-header > span:last-child { color: #7b6a54; white-space: nowrap; }
+.wish-ticket-message { margin: 18px 0 20px; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(18px, 1.8vw, 23px); font-style: italic; font-weight: 500; line-height: 1.5; letter-spacing: -.02em; overflow-wrap: break-word; color: #372b22; }
+.wish-ticket-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 5px; padding-bottom: 14px; border-bottom: 1px dashed #8b715648; color: #8e7960; font-size: 6px; font-weight: 500; line-height: 1.5; letter-spacing: .15em; }
+.wish-ticket-footer > span:last-child { color: #a45143; font-size: 12px; line-height: 1; }
+.wish-another { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-height: 44px; padding: 10px 0; border: 0; border-radius: 1px; background: none; color: #8d3e35; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; line-height: 1.5; text-align: left; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.wish-another > span:last-child { font-size: 17px; font-weight: 400; }
+.wish-another:hover { color: #5a2721; }
+.wish-another:focus-visible { outline: 2px solid #8d3e35; outline-offset: 3px; }
 .wish-art { position: relative; height: 450px; min-width: 0; user-select: none; }
 .wish-ambient { position: absolute; inset: -12% -25%; background: radial-gradient(ellipse at 50% 45%, #aa622019, #aa622007 40%, transparent 67%); opacity: 1; transition: opacity 1.4s; }
 .wish-orbit { position: absolute; pointer-events: none; top: 43%; left: 50%; width: 350px; height: 350px; border-radius: 50%; border: 1px solid #dec19717; transform: translate(-50%, -50%); }
@@ -56,6 +68,7 @@
 @keyframes wish-flame-drift { 0%,100% { transform: rotate(4deg) scale(1,1); } 28% { transform: rotate(-3deg) scale(.95,1.04); } 66% { transform: rotate(2deg) scale(1.02,.98); } }
 @keyframes wish-smoke-rise { 0% { opacity: 0; transform: translate(-3px,0) scale(.5); } 25% { opacity: .65; } 100% { opacity: 0; transform: translate(14px,-65px) scale(1.45); } }
 @keyframes wish-confetti { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 12% { opacity: .75; } 65% { opacity: .5; } 100% { opacity: 0; transform: translate(var(--wish-x),var(--wish-y)) rotate(var(--wish-turn)); } }
+@keyframes wish-ticket-reveal { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 1000px) {
   .wish-inner { width: calc(100% - 72px); min-height: 560px; gap: 15px; padding: 50px 0; }
   .wish-copy h2 { font-size: clamp(29px, 4vw, 42px); }
@@ -72,6 +85,10 @@
   .wish-button { min-width: 151px; min-height: 48px; font-size: 12px; touch-action: manipulation; }
   .wish-response { padding-top: 15px; min-height: 34px; }
   .wish-response-text { font-size: 11px; }
+  .wish-ticket { max-width: 380px; margin: 20px auto 0; padding: 19px 20px 8px; }
+  .wish-ticket-header { font-size: 7px; padding-bottom: 14px; }
+  .wish-ticket-message { margin: 16px 0 18px; font-size: 20px; line-height: 1.5; }
+  .wish-another { min-height: 48px; font-size: 12px; }
   .wish-art { width: 100%; height: 375px; transform: none; margin-top: 15px; }
   .wish-orbit { width: 290px; height: 290px; top: 45%; }
   .wish-orbit-outer { width: 335px; height: 335px; }
@@ -88,6 +105,8 @@
   .wish-orbit { width: 255px; height: 255px; }
   .wish-orbit-outer { width: 295px; height: 295px; }
   .wish-art-caption { font-size: 4.5px; }
+  .wish-ticket { padding-left: 18px; padding-right: 18px; }
+  .wish-ticket-message { font-size: 19px; }
 }
 /* Keep the text and candle together when a phone turns sideways. */
 @media (orientation: landscape) and (max-height: 500px) and (min-width: 560px) {
@@ -99,6 +118,9 @@
   .wish-button { min-height: 48px; font-size: 12px; touch-action: manipulation; }
   .wish-response { padding-top: 13px; }
   .wish-response-text { font-size: 10px; }
+  .wish-ticket { margin: 16px 0 0; padding: 15px 17px 6px; }
+  .wish-ticket-header { font-size: 6px; padding-bottom: 12px; }
+  .wish-ticket-message { font-size: 18px; margin: 13px 0 15px; }
   .wish-art { width: 100%; height: 310px; margin-top: 0; transform: none; }
   .wish-orbit { top: 45%; width: min(100%, 270px); height: auto; aspect-ratio: 1; }
   .wish-orbit-outer { width: min(112%, 310px); }
@@ -119,7 +141,7 @@
   .wish-orbit-dot { top: 193px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wish-flame, .wish-smoke, .wish-particle { animation: none !important; }
+  .wish-flame, .wish-smoke, .wish-particle, .wish-ticket { animation: none !important; }
   .wish-flame, .wish-halo, .wish-ambient, .wish-candle, .wish-button, .wish-response-text { transition: none !important; }
   .wish-extinguished .wish-smoke, .wish-burst { display: none; }
 }

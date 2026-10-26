@@ -112,3 +112,37 @@
 }
 @media(max-width:340px){.site-footer .wordmark{font-size:23.5vw;max-width:100%;letter-spacing:-1.8px;white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){.hero-photo,.hero-thumb,.hero-thumb img,.hero-thumb:after,.gallery-poster,.gallery-poster-image,.site-footer .wordmark{transition:none!important}.hero-thumb:hover,.hero-photo,.hero-photo.is-current,.gallery-poster:hover .gallery-poster-image{transform:none}.hero-thumb:hover{transform:none}}
+
+/* Clear section orientation and readable supporting copy on phones. */
+.birthday-today .film-meta .match{color:#f0d4a7}
+.birthday-today .film-meta .match::before{content:'';display:inline-block;width:5px;height:5px;margin:0 7px 2px 0;border-radius:50%;background:#ec4555;box-shadow:0 0 11px #ec455533;vertical-align:middle}
+.main-nav a[aria-current='location']{color:#fff2e3}
+@media(max-width:600px){
+  .site-header .brand-caption{display:none}
+  .site-header>.wordmark{padding-bottom:0}
+  .site-header .main-nav a[aria-current='location']{background:#f7e8d210;color:#fff2e3}
+  .site-header .main-nav a[aria-current='location']::after{left:24%;right:24%;background:#ed4052}
+  .film-meta{flex-wrap:wrap;row-gap:7px;font-size:10px}
+  .film-meta .match{font-size:10px}
+  .hero-footnote{font-size:10px;letter-spacing:0;line-height:1.6}
+  .hero-thumb>span,.premiere-stamp>span,.wish-art-caption{display:none}
+  .hero-frame-label{font-size:10px;letter-spacing:.8px}
+  .hero-scroll{font-size:10px;line-height:1.5;letter-spacing:.2px}
+  .gallery-eyebrow,.section-heading .eyebrow{font-size:10px;letter-spacing:1.3px;line-height:1.6}
+  .gallery-view-all{font-size:12px;gap:9px}
+  .gallery-poster-bottom{font-size:10px;letter-spacing:.3px}
+  .gallery-poster-explore{font-size:11px}
+  .gallery-rail-footer{gap:0}
+  .gallery-rail-footer p{font-size:10px;letter-spacing:.45px;line-height:1.7;min-width:0}
+  .gallery-rail-progress{display:none}
+  .episode-caption,.row-caption{font-size:12px;line-height:1.7}
+  .wish-response-text{font-size:12px;line-height:1.6}
+  .letter-teaser .eyebrow{font-size:10px;letter-spacing:1.1px;line-height:1.7}
+  .letter-teaser>p:not(.eyebrow){font-size:12px;line-height:1.8}
+  .letter-teaser .text-button{font-size:12px}
+  .countdown-panel .eyebrow,.countdown div span,.countdown-date{font-size:10px;letter-spacing:.8px}
+  .site-footer p{font-size:11px;max-width:none}
+  .site-footer>span{font-size:10px;line-height:1.7;letter-spacing:.8px;max-width:none;flex-basis:100%;margin-left:0}
+  .letter-dialog .eyebrow{font-size:10px;letter-spacing:.7px;line-height:1.8}
+  .letter-end span{font-size:10px;letter-spacing:.8px;line-height:1.6}
+}

@@ -66,12 +66,13 @@
   const navLinks = [...document.querySelectorAll('.main-nav a[href^="#"]')];
   const syncHeader = () => {
     header.classList.toggle('is-scrolled', window.scrollY > 35);
+    const sectionThreshold = header.getBoundingClientRect().bottom + 24;
     let selected = navLinks[0];
     let nearestTop = -Infinity;
     navLinks.forEach(link => {
       const section = document.querySelector(link.getAttribute('href'));
       const top = section?.getBoundingClientRect().top;
-      if (top !== undefined && top <= 160 && top > nearestTop) { selected = link; nearestTop = top; }
+      if (top !== undefined && top <= sectionThreshold && top > nearestTop) { selected = link; nearestTop = top; }
     });
     navLinks.forEach(link => {
       link.classList.toggle('active', link === selected);
@@ -80,7 +81,33 @@
     });
   };
   window.addEventListener('scroll', syncHeader, { passive: true });
+  window.addEventListener('resize', syncHeader, { passive: true });
+  window.addEventListener('load', syncHeader, { once: true });
   syncHeader();
+
+  // The configured ISO offset defines the same 24-hour birthday window as app.js.
+  const birthdayStart = new Date(window.BIRTHDAY.birthday).getTime();
+  const birthdayEnd = birthdayStart + 86400000;
+  const birthdayGreeting = document.querySelector('.film-meta .match');
+  const letterTeaser = document.querySelector('.letter-teaser > p:not(.eyebrow)');
+  const ordinaryGreeting = birthdayGreeting?.textContent;
+  const ordinaryLetterTeaser = letterTeaser?.textContent;
+  const recipient = window.BIRTHDAY.name || 'Bhavyaa';
+  let birthdayTimer;
+  function syncBirthdayDay() {
+    clearTimeout(birthdayTimer);
+    if (!Number.isFinite(birthdayStart)) return;
+    const now = Date.now();
+    const isBirthday = now >= birthdayStart && now < birthdayEnd;
+    document.body.classList.toggle('birthday-today', isBirthday);
+    if (birthdayGreeting) birthdayGreeting.textContent = isBirthday ? `Today is all yours, ${recipient}.` : ordinaryGreeting;
+    if (letterTeaser) letterTeaser.textContent = isBirthday ? `A few words for your day, ${recipient}.` : ordinaryLetterTeaser;
+    const nextBoundary = now < birthdayStart ? birthdayStart : now < birthdayEnd ? birthdayEnd : null;
+    if (nextBoundary !== null) birthdayTimer = setTimeout(syncBirthdayDay, Math.min(nextBoundary - now + 20, 2147483647));
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) syncBirthdayDay(); });
+  syncBirthdayDay();
+
   if ('IntersectionObserver' in window && !motion.matches) {
     const reveals = document.querySelectorAll('.section-heading, .letter-banner, .countdown-panel, .site-footer');
     const observer = new IntersectionObserver(entries => {

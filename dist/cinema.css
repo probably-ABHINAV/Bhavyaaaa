@@ -173,3 +173,47 @@ body.cinema-open { overflow: hidden; }
 @media(max-width:650px),(max-height:500px){.cinema-icon-button{width:44px;height:44px;min-width:44px;min-height:44px}.cinema-sound,.cinema-replay,.cinema-letter{min-height:44px}.cinema-controls{bottom:max(12px,env(safe-area-inset-bottom))}.cinema-control-row{gap:6px}.cinema-timeline{min-height:30px;align-items:center}.cinema-timeline button{min-height:30px}}
 @media(pointer:coarse){button,a{touch-action:manipulation}}
 @media(max-width:380px){.cinema-controls{left:14px;right:14px}.cinema-sound{min-width:44px;width:44px;justify-content:center;padding:0}.cinema-sound span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.cinema-clock{margin-left:5px}.cinema-playback{margin-right:0}}
+
+/* A separate, dismissible sleeve for the official Khat soundtrack. */
+.cinema-soundtrack-tray[hidden] { display: none; }
+.cinema-soundtrack-tray { position: absolute; z-index: 10; top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(440px, calc(100% - 32px)); max-height: calc(100dvh - 150px); overflow: auto; overscroll-behavior: contain; padding: 22px 24px 14px; border: 1px solid #f4f0e825; border-radius: 16px; background: #171514; box-shadow: 0 24px 100px #0009, 0 0 0 100vmax #090909ad; scrollbar-width: thin; scrollbar-color: #6a5e58 #171514; }
+.cinema-soundtrack-open .cinema-topbar { z-index: 11; }
+.cinema-soundtrack-open .cinema-controls { opacity: .3; }
+.cinema-soundtrack-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: -8px -10px 4px 0; }
+.cinema-soundtrack-heading p { margin: 0; color: #efae9e; font-size: 10px; font-weight: 600; letter-spacing: .2em; }
+.cinema-soundtrack-dismiss { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+.cinema-soundtrack-tray h2 { margin: 0; outline: none; color: #f4f0e8; font-family: 'Playfair Display', Georgia, serif; font-size: 40px; font-weight: 500; line-height: 1.2; }
+.cinema-soundtrack-tray h2 em { display: block; margin-top: 6px; color: #d1c5ba; font-family: 'DM Sans', sans-serif; font-size: 13px; font-style: normal; font-weight: 400; }
+.cinema-soundtrack-intro { margin: 12px 0 19px; color: #ddd3c9; font-size: 13px; line-height: 1.5; }
+.cinema-soundtrack-player { min-height: 152px; width: 100%; overflow: hidden; border-radius: 12px; background: #222; }
+.cinema-soundtrack-player iframe { display: block; width: 100%; max-width: 100%; height: 152px; border: 0; border-radius: 12px; }
+.cinema-soundtrack-status { margin: 13px 0; color: #d1c5ba; font-size: 11px; line-height: 1.6; }
+.cinema-soundtrack-start, .cinema-soundtrack-silent { display: flex; width: 100%; min-height: 46px; align-items: center; justify-content: center; gap: 9px; border: 0; border-radius: 5px; padding: 12px; font-size: 13px !important; font-weight: 600 !important; }
+.cinema-soundtrack-start { background: #e51b32; color: #fff; }
+.cinema-soundtrack-start:hover { background: #f52b42; }
+.cinema-soundtrack-start:disabled { cursor: wait; background: #75434a; color: #f4f0e8b3; }
+.cinema-soundtrack-start svg { width: 18px; height: 18px; }
+.cinema-soundtrack-silent { margin-top: 3px; background: transparent; color: #d1c5ba; font-size: 12px !important; font-weight: 400 !important; }
+.cinema-soundtrack-silent:hover { color: #fff; background: #ffffff08; }
+.cinema-soundtrack-note { margin: 10px 0 0; color: #bdb0a5; font-size: 11px; line-height: 1.65; }
+.cinema-soundtrack-link { display: inline-flex; min-height: 44px; gap: 8px; align-items: center; color: #f4f0e8; font-size: 12px; text-underline-offset: 4px; }
+.cinema-soundtrack-link:focus-visible { outline: 2px solid #f4f0e8; outline-offset: 3px; }
+.cinema-sound { min-width: 68px; min-height: 44px; color: #f4f0e8; font-size: 12px !important; }
+.cinema-sound.is-playing svg { color: #ff7b87; }
+@media (max-width: 600px) {
+  .cinema-soundtrack-tray { width: calc(100% - 28px); max-height: calc(100dvh - 142px); padding: 18px 16px 10px; }
+  .cinema-soundtrack-tray h2 { font-size: 34px; }
+  .cinema-soundtrack-intro { margin-bottom: 14px; }
+  .cinema-soundtrack-heading { margin-top: -8px; margin-right: -6px; }
+}
+@media (max-width: 380px) {
+  .cinema-sound { width: 64px; min-width: 64px; gap: 5px; }
+  .cinema-sound span { position: static; width: auto; height: auto; overflow: visible; clip-path: none; }
+  .cinema-sound svg { width: 16px; height: 16px; }
+}
+@media (max-height: 560px) and (orientation: landscape) {
+  .cinema-soundtrack-tray { max-height: calc(100dvh - 28px); width: min(450px, calc(100% - 150px)); padding-top: 12px; }
+  .cinema-soundtrack-heading { position: sticky; z-index: 1; top: -12px; margin-top: -5px; padding: 4px 0; background: #171514; }
+  .cinema-soundtrack-tray h2 { font-size: 30px; }
+  .cinema-soundtrack-intro { margin-top: 9px; margin-bottom: 12px; }
+}

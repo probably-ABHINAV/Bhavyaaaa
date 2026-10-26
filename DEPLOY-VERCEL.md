@@ -1,6 +1,6 @@
 # Publish BHAVYAA on Vercel
 
-The ZIP contains the complete editable website and all 35 photos, fonts, games, and local artwork. It uses plain HTML, CSS, and JavaScript. No database, API keys, or paid dependencies are required. Spotify streams through its official embedded player and needs an internet connection.
+The ZIP contains the complete editable website and all 35 photos, fonts, games, and local artwork. It uses plain HTML, CSS, and JavaScript. No database, API keys, or paid dependencies are required. The 12-song library streams through Spotify's official embedded player and needs an internet connection.
 
 ## Easiest route: GitHub and Vercel
 
@@ -36,13 +36,19 @@ Open http://127.0.0.1:4317. Stop the server with Ctrl+C.
 
 - `dist/content.js`: name, birthday date, four wishes, personal letter.
 - `dist/photos.js`: gallery images and collections.
-- `dist/music-data.js`: the three Spotify tracks and official embed links.
+- `dist/music-data.js`: the 12 Spotify tracks, artist credits, mood tags, and official embed links.
+- `dist/music.js` and `dist/music.css`: mood filters, song/artist search, previous/next selection, “Surprise me” shuffle, and browser-local remembered selection.
 - `dist/cinema.js`: the 60-second photo film.
 - `dist/arcade.js` and `dist/arcade.css`: memory game and portrait puzzle.
-- `dist/wish.js` and `dist/wish.css`: interactive birthday candle.
+- `dist/wish.js` and `dist/wish.css`: interactive birthday candle and eight rotating birthday-ticket messages.
+- `dist/premium.js`: portrait selection, active section navigation, and birthday-day hero/letter greetings.
 - `dist/edition.css`: final brand and layout refinements.
 
-The date is **27 October 2026, midnight in India**. The countdown changes automatically into a birthday greeting on that date and a new-chapter message afterwards. Spotify controls playback availability; a listener may get a preview or need to sign in for more playback.
+The date is **27 October 2026, midnight in India**. The countdown changes automatically into a birthday greeting on that date and a new-chapter message afterwards. The hero and letter teaser also personalize their text during that same 24-hour window, using the offset in `dist/content.js` rather than the visitor's local timezone.
+
+The song library includes Warm nostalgia, Indie evenings, and Open skies mood filters. Previous/next and shuffle select from the current search and mood results; selection loads a track without autoplay. The last selected song is remembered only in the current browser. Spotify controls playback availability; a listener may get a preview or need to sign in for more playback.
+
+The wish ticket shows one of eight messages when the candle is extinguished. “One more little wish” draws another message without repeating the current set; relighting hides the ticket. The mobile layout keeps navigation, captions, and touch controls readable, and highlights the section currently being viewed.
 
 The Vercel website is independent of the private ChatGPT Sites preview. Configure access in your Vercel project if you want a restricted audience. Your photos and letter are part of the deployed website.
 

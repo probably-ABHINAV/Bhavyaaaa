@@ -1,10 +1,14 @@
-/* A sixty-second, local photo premiere. Audio starts only through its sound button. */
+/* A sixty-second photo premiere, with Khat in Spotify's official player. */
 (() => {
   'use strict';
   const durations = [5, 8, 8, 8, 8, 8, 8, 7];
   const starts = durations.map((_, index) => durations.slice(0, index).reduce((sum, n) => sum + n, 0));
   const total = durations.reduce((sum, n) => sum + n, 0);
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const soundtrack = {
+    title: 'Khat', artist: 'Navjot Ahuja',
+    url: 'https://open.spotify.com/track/3gixnmepHSsyAuho34rprN?utm_source=openai&utm_medium=chatgpt&go=1&nap_web=1&request_id=44c3cbfe-54b4-42fe-bbbc-ebf60ded0b2d'
+  };
   const icons = {
     play: '<path d="m9 5 11 7-11 7Z" fill="currentColor" stroke="none"/>',
     pause: '<path d="M8 5v14M16 5v14"/>',
@@ -18,59 +22,34 @@
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]}</svg>`;
   const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
   let dialog, stage, playback, sound, clock, segments, sceneLabel, ending, announcer;
+  let soundtrackTray, soundtrackPlayer, soundtrackStatus, soundtrackStart;
   let frames = [], sceneIndex = -1, elapsed = 0, lastTick = 0, raf = 0;
-  let running = false, active = false, previousFocus, audioEngine = null, soundEnabled = false, audioRequest = 0;
+  let running = false, active = false, previousFocus;
+  let spotifyApi, spotifyPromise, spotifyController, soundtrackSession = 0;
+  let soundtrackReady = false, soundtrackPlaying = false, soundtrackRequested = false;
 
-  function createAudio() {
-    const Context = window.AudioContext || window.webkitAudioContext;
-    if (!Context) return null;
-    const context = new Context();
-    const master = context.createGain();
-    master.gain.value = 0;
-    master.connect(context.destination);
-    const voices = new Set();
-    let timer = null, chord = 0, nextNote = 0;
-    const chords = [[130.81, 164.81, 196, 261.63], [110, 130.81, 164.81, 220], [87.31, 130.81, 174.61, 220], [98, 146.83, 196, 246.94]];
-    function tone(frequency, time, length, level) {
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.value = frequency;
-      gain.gain.setValueAtTime(0, time);
-      gain.gain.linearRampToValueAtTime(level, time + 0.7);
-      gain.gain.exponentialRampToValueAtTime(0.0001, time + length);
-      oscillator.connect(gain); gain.connect(master);
-      oscillator.start(time); oscillator.stop(time + length + 0.05);
-      voices.add(oscillator);
-      oscillator.onended = () => { voices.delete(oscillator); oscillator.disconnect(); gain.disconnect(); };
-    }
-    function schedule() {
-      if (context.state !== 'running') return;
-      if (nextNote < context.currentTime) nextNote = context.currentTime + 0.06;
-      while (nextNote < context.currentTime + 0.3) {
-        const notes = chords[chord % chords.length];
-        notes.forEach((frequency, index) => tone(frequency, nextNote + index * 0.55, 5.5, 0.028));
-        tone(notes[2] * 2, nextNote + 2.3, 3.4, 0.018);
-        nextNote += 5.6; chord++;
-      }
-    }
-    return {
-      async start() {
-        await context.resume();
-        master.gain.cancelScheduledValues(context.currentTime);
-        master.gain.setTargetAtTime(0.55, context.currentTime, 0.55);
-        schedule(); timer = window.setInterval(schedule, 160);
-      },
-      pause() { void context.suspend().catch(() => {}); },
-      resume() { void context.resume().catch(() => {}); },
-      stop() {
-        window.clearInterval(timer);
-        master.gain.cancelScheduledValues(context.currentTime);
-        master.gain.setTargetAtTime(0, context.currentTime, 0.035);
-        voices.forEach(voice => { try { voice.stop(context.currentTime + 0.15); } catch (_) {} });
-        window.setTimeout(() => { if (context.state !== 'closed') void context.close().catch(() => {}); }, 220);
-      }
-    };
+  function loadSpotifyApi() {
+    if (spotifyApi) return Promise.resolve(spotifyApi);
+    if (spotifyPromise) return spotifyPromise;
+    spotifyPromise = new Promise((resolve, reject) => {
+      const previousReady = window.onSpotifyIframeApiReady;
+      const script = document.createElement('script');
+      const timeout = window.setTimeout(() => reject(new Error('Spotify player did not load.')), 15000);
+      window.onSpotifyIframeApiReady = api => {
+        spotifyApi = api;
+        window.clearTimeout(timeout);
+        resolve(api);
+        if (typeof previousReady === 'function') previousReady(api);
+      };
+      script.src = 'https://open.spotify.com/embed/iframe-api/v1';
+      script.async = true;
+      script.addEventListener('error', () => {
+        window.clearTimeout(timeout);
+        reject(new Error('Spotify player is unavailable.'));
+      }, { once: true });
+      document.head.append(script);
+    });
+    return spotifyPromise;
   }
 
   function buildDialog() {
@@ -83,9 +62,20 @@
         <header class="cinema-topbar"><span class="cinema-brand"><span>BHAVYAA</span> ORIGINAL</span><span class="cinema-topline">A LITTLE FILM, JUST FOR YOU</span><button type="button" class="cinema-icon-button cinema-close" aria-label="Close birthday film">${icon('close')}</button></header>
         <div class="cinema-stage"></div><div class="cinema-grain" aria-hidden="true"></div>
         <div class="cinema-announcer" role="status" aria-live="polite"></div>
+        <section class="cinema-soundtrack-tray" id="cinema-soundtrack" aria-labelledby="cinema-soundtrack-title" hidden>
+          <div class="cinema-soundtrack-heading"><p>THE SOUNDTRACK</p><button type="button" class="cinema-icon-button cinema-soundtrack-dismiss" aria-label="Hide soundtrack player">${icon('close')}</button></div>
+          <h2 id="cinema-soundtrack-title" tabindex="-1">${soundtrack.title}<em>by ${soundtrack.artist}</em></h2>
+          <p class="cinema-soundtrack-intro">A song for your birthday film.</p>
+          <div class="cinema-soundtrack-player"></div>
+          <p class="cinema-soundtrack-status" role="status" aria-live="polite">Loading the Spotify player…</p>
+          <button type="button" class="cinema-soundtrack-start" disabled>${icon('play')}<span>Play Khat + film</span></button>
+          <button type="button" class="cinema-soundtrack-silent">Watch without music</button>
+          <p class="cinema-soundtrack-note">If the song doesn’t start, tap Khat below and use Spotify’s play button. Spotify may offer a preview or ask you to sign in.</p>
+          <a class="cinema-soundtrack-link" href="${escape(soundtrack.url)}" target="_blank" rel="noopener noreferrer">Open Khat on Spotify <span aria-hidden="true">↗</span></a>
+        </section>
         <footer class="cinema-controls">
           <div class="cinema-timeline" aria-label="Film chapters">${durations.map((duration, index) => `<button type="button" class="cinema-segment" style="--segment-weight:${duration}" data-cinema-scene="${index}" aria-label="Jump to chapter ${index + 1}"><span></span></button>`).join('')}</div>
-          <div class="cinema-control-row"><div class="cinema-playback-group"><button type="button" class="cinema-icon-button cinema-playback" aria-label="Pause film">${icon('pause')}</button><button type="button" class="cinema-icon-button cinema-previous" aria-label="Previous chapter">${icon('previous')}</button><button type="button" class="cinema-icon-button cinema-next" aria-label="Next chapter">${icon('next')}</button><span class="cinema-clock">0:00 <span>/ 1:00</span></span></div><span class="cinema-scene-label">THE OPENING</span><button type="button" class="cinema-sound" aria-pressed="false">${icon('muted')}<span>Sound off</span></button></div>
+          <div class="cinema-control-row"><div class="cinema-playback-group"><button type="button" class="cinema-icon-button cinema-playback" aria-label="Pause film">${icon('pause')}</button><button type="button" class="cinema-icon-button cinema-previous" aria-label="Previous chapter">${icon('previous')}</button><button type="button" class="cinema-icon-button cinema-next" aria-label="Next chapter">${icon('next')}</button><span class="cinema-clock">0:00 <span>/ 1:00</span></span></div><span class="cinema-scene-label">THE OPENING</span><button type="button" class="cinema-sound" aria-controls="cinema-soundtrack" aria-expanded="false" aria-label="Open Khat soundtrack by Navjot Ahuja">${icon('sound')}<span>Khat</span></button></div>
         </footer>
       </div>`;
     document.body.append(dialog);
@@ -93,31 +83,34 @@
     playback = dialog.querySelector('.cinema-playback'); sound = dialog.querySelector('.cinema-sound');
     clock = dialog.querySelector('.cinema-clock'); sceneLabel = dialog.querySelector('.cinema-scene-label');
     announcer = dialog.querySelector('.cinema-announcer');
+    soundtrackTray = dialog.querySelector('.cinema-soundtrack-tray');
+    soundtrackPlayer = dialog.querySelector('.cinema-soundtrack-player');
+    soundtrackStatus = dialog.querySelector('.cinema-soundtrack-status');
+    soundtrackStart = dialog.querySelector('.cinema-soundtrack-start');
     segments = Array.from(dialog.querySelectorAll('.cinema-segment'));
     dialog.querySelector('.cinema-close').addEventListener('click', close);
     playback.addEventListener('click', togglePlayback);
     dialog.querySelector('.cinema-previous').addEventListener('click', () => jump(sceneIndex - 1));
     dialog.querySelector('.cinema-next').addEventListener('click', () => jump(sceneIndex + 1));
     segments.forEach((segment, index) => segment.addEventListener('click', () => jump(index)));
-    sound.addEventListener('click', toggleSound);
+    sound.addEventListener('click', () => setSoundtrackTray(soundtrackTray.hidden));
+    dialog.querySelector('.cinema-soundtrack-dismiss').addEventListener('click', () => setSoundtrackTray(false));
+    soundtrackStart.addEventListener('click', () => startFromSoundtrack(true));
+    dialog.querySelector('.cinema-soundtrack-silent').addEventListener('click', () => startFromSoundtrack(false));
     dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
     dialog.addEventListener('close', cleanup);
     dialog.addEventListener('keydown', event => {
       if (event.altKey || event.ctrlKey || event.metaKey) return;
-      if (event.key === 'ArrowRight') { event.preventDefault(); jump(sceneIndex + 1); }
-      if (event.key === 'ArrowLeft') { event.preventDefault(); jump(sceneIndex - 1); }
+      if (soundtrackTray.hidden && event.key === 'ArrowRight') { event.preventDefault(); jump(sceneIndex + 1); }
+      if (soundtrackTray.hidden && event.key === 'ArrowLeft') { event.preventDefault(); jump(sceneIndex - 1); }
       if (event.key === ' ' && event.target === dialog) { event.preventDefault(); togglePlayback(); }
       if (event.key === 'Escape' && typeof dialog.showModal !== 'function') { event.preventDefault(); close(); }
       if (event.key === 'Tab' && typeof dialog.showModal !== 'function') {
-        const focusable = Array.from(dialog.querySelectorAll('button:not(:disabled)')).filter(node => node.getClientRects().length);
+        const focusable = Array.from(dialog.querySelectorAll('button:not(:disabled), a[href], iframe')).filter(node => node.getClientRects().length && !node.closest('[inert]'));
         if (event.shiftKey && document.activeElement === focusable[0]) { event.preventDefault(); focusable.at(-1)?.focus(); }
         if (!event.shiftKey && document.activeElement === focusable.at(-1)) { event.preventDefault(); focusable[0]?.focus(); }
       }
     });
-    if (!(window.AudioContext || window.webkitAudioContext)) {
-      sound.disabled = true; sound.querySelector('span').textContent = 'Sound unavailable';
-      sound.setAttribute('title', 'This browser does not support the optional soundtrack.');
-    }
   }
 
   function makeScenes() {
@@ -200,7 +193,8 @@
     dialog.classList.toggle('cinema-paused', !value);
     playback.innerHTML = icon(value ? 'pause' : elapsed >= total ? 'replay' : 'play');
     playback.setAttribute('aria-label', value ? 'Pause film' : elapsed >= total ? 'Replay film' : 'Resume film');
-    if (audioEngine) { if (value) audioEngine.resume(); else audioEngine.pause(); }
+    if (!value) pauseSoundtrack();
+    else if (soundtrackRequested && !soundtrackPlaying) commandSoundtrack('resume');
     if (value && active) raf = requestAnimationFrame(tick);
   }
   function togglePlayback() { if (elapsed >= total) { jump(0); setPlaying(true); } else setPlaying(!running); }
@@ -210,31 +204,93 @@
     ending.hidden = true; dialog.classList.remove('cinema-ended'); draw();
     if (!running) { playback.innerHTML = icon('play'); playback.setAttribute('aria-label', 'Resume film'); }
   }
-  async function toggleSound() {
-    if (sound.disabled) return;
-    if (soundEnabled) { stopSound(); return; }
-    const request = ++audioRequest;
+  function commandSoundtrack(method) {
+    try { spotifyController?.[method](); } catch (_) { /* Native controls and Spotify link remain available. */ }
+  }
+  function pauseSoundtrack() {
+    if (soundtrackRequested || soundtrackPlaying) commandSoundtrack('pause');
+    soundtrackPlaying = false;
+    sound?.classList.remove('is-playing');
+    if (soundtrackReady) soundtrackStatus.textContent = 'Khat is paused. Press play when you are ready.';
+  }
+  function setSoundtrackTray(visible, focus = true) {
+    if (visible) setPlaying(false);
+    soundtrackTray.hidden = !visible;
+    stage.inert = visible;
+    dialog.querySelector('.cinema-controls').inert = visible;
+    dialog.classList.toggle('cinema-soundtrack-open', visible);
+    sound.setAttribute('aria-expanded', String(visible));
+    if (!visible && !running) pauseSoundtrack();
+    if (focus) (visible ? dialog.querySelector('#cinema-soundtrack-title') : playback).focus({ preventScroll: true });
+  }
+  function startFromSoundtrack(withMusic) {
+    if (!active) return;
+    if (elapsed >= total) jump(0);
+    // Keep the play request in this click gesture; Spotify/browser policy can still require native Play.
+    soundtrackRequested = false;
+    setPlaying(true);
+    if (withMusic && soundtrackReady) {
+      soundtrackRequested = true;
+      commandSoundtrack('play');
+    } else pauseSoundtrack();
+    setSoundtrackTray(false);
+  }
+  async function prepareSoundtrack() {
+    const session = ++soundtrackSession;
+    soundtrackReady = false; soundtrackPlaying = false; soundtrackRequested = false;
+    soundtrackStart.disabled = true;
+    soundtrackStatus.textContent = 'Loading the Spotify player…';
+    soundtrackPlayer.replaceChildren();
+    const mount = document.createElement('div');
+    soundtrackPlayer.append(mount);
     try {
-      const engine = createAudio();
-      if (!engine) return;
-      audioEngine = engine;
-      await engine.start();
-      if (!active || request !== audioRequest) { engine.stop(); return; }
-      soundEnabled = true;
-      sound.setAttribute('aria-pressed', 'true'); sound.innerHTML = `${icon('sound')}<span>Sound on</span>`;
-      if (!running) engine.pause();
+      const api = await loadSpotifyApi();
+      if (!active || session !== soundtrackSession) return;
+      api.createController(mount, { url: soundtrack.url, width: '100%', height: 152 }, controller => {
+        if (!active || session !== soundtrackSession) { controller.destroy(); return; }
+        spotifyController = controller;
+        const current = () => active && session === soundtrackSession && spotifyController === controller;
+        controller.addListener('ready', () => {
+          if (!current()) return;
+          soundtrackReady = true;
+          soundtrackStart.disabled = false;
+          soundtrackStatus.textContent = 'Your film is ready when you are.';
+          const iframe = soundtrackPlayer.querySelector('iframe');
+          if (iframe) iframe.title = 'Khat by Navjot Ahuja — official Spotify player';
+        });
+        controller.addListener('playback_started', () => {
+          if (!current()) return;
+          if (document.hidden || (!running && soundtrackTray.hidden)) { pauseSoundtrack(); return; }
+          soundtrackRequested = true;
+          soundtrackStatus.textContent = 'Khat is playing. Start the film whenever you’re ready.';
+        });
+        controller.addListener('playback_update', event => {
+          if (!current() || typeof event.data?.isPaused !== 'boolean') return;
+          const wasPlaying = soundtrackPlaying;
+          soundtrackPlaying = !event.data.isPaused;
+          if (soundtrackPlaying) {
+            soundtrackRequested = true;
+            if (document.hidden || (!running && soundtrackTray.hidden)) { pauseSoundtrack(); return; }
+          } else if (wasPlaying && running) soundtrackRequested = false;
+          sound.classList.toggle('is-playing', soundtrackPlaying);
+        });
+      });
     } catch (_) {
-      stopSound(); sound.disabled = true;
-      sound.innerHTML = `${icon('muted')}<span>Sound unavailable</span>`;
+      if (!active || session !== soundtrackSession) return;
+      soundtrackStatus.textContent = 'Spotify could not load here. Open the song on Spotify, or watch the film without music.';
     }
   }
-  function stopSound() {
-    audioRequest++; audioEngine?.stop(); audioEngine = null; soundEnabled = false;
-    if (sound && !sound.disabled) { sound.setAttribute('aria-pressed', 'false'); sound.innerHTML = `${icon('muted')}<span>Sound off</span>`; }
+  function stopSoundtrack() {
+    soundtrackSession++;
+    pauseSoundtrack();
+    commandSoundtrack('destroy');
+    spotifyController = null;
+    soundtrackReady = false; soundtrackRequested = false;
+    soundtrackPlayer?.replaceChildren();
   }
   function cleanup() {
     if (!active) return;
-    active = false; running = false; cancelAnimationFrame(raf); stopSound();
+    active = false; running = false; cancelAnimationFrame(raf); stopSoundtrack();
     document.body.classList.remove('cinema-open');
     if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
   }
@@ -244,19 +300,21 @@
     cleanup();
   }
   document.addEventListener('visibilitychange', () => {
-    if (active && document.hidden && running) setPlaying(false);
+    if (active && document.hidden) setPlaying(false);
   });
   window.openBirthdayPremiere = () => {
     if (active) return;
     buildDialog(); makeScenes();
     previousFocus = document.activeElement;
     elapsed = 0; sceneIndex = -1; active = true;
+    document.dispatchEvent(new CustomEvent('birthday:film-open'));
     frames.forEach(frame => frame.inert = true);
     dialog.classList.toggle('cinema-reduced-motion', motion.matches);
     dialog.classList.remove('cinema-ended');
     document.body.classList.add('cinema-open');
     if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', '');
-    draw(); setPlaying(true);
-    dialog.querySelector('.cinema-close').focus({ preventScroll: true });
+    draw(); setPlaying(false);
+    setSoundtrackTray(true);
+    void prepareSoundtrack();
   };
 })();
