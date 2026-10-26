@@ -1,0 +1,6 @@
+node_modules/
+.sites-runtime/
+*.log
+.env*
+.DS_Store
+.vercel

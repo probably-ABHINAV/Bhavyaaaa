@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111010">
+  <meta name="description" content="A birthday original, made just for Bhavyaa. Premiering 27 October, with a little nostalgia and a whole lot of good wishes.">
+  <title>BHAVYAA · The Birthday Edition</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/barlow-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="premium.css">
+  <link rel="stylesheet" href="gallery.css">
+  <link rel="stylesheet" href="cinema.css">
+  <link rel="stylesheet" href="wish.css">
+  <link rel="stylesheet" href="music.css">
+  <link rel="stylesheet" href="arcade.css">
+  <link rel="stylesheet" href="edition.css">
+  <script src="content.js" defer></script>
+  <script src="photos.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="gallery.js" defer></script>
+  <script src="cinema.js" defer></script>
+  <script src="premium.js" defer></script>
+  <script src="wish.js" defer></script>
+  <script src="music-data.js" defer></script>
+  <script src="music.js" defer></script>
+  <script src="arcade.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 13 8-13 8z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="4"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v1"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4-6 4z"/></symbol>
+    <symbol id="i-envelope" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></symbol>
+  </svg>
+  <a class="skip-link" href="#main">Skip to your birthday special</a>
+  <header class="site-header" id="site-header">
+    <a class="wordmark" href="#home" aria-label="Bhavyaa home">BHAVYAA<span class="brand-period">.</span><span class="brand-caption">A BIRTHDAY ORIGINAL</span></a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#home" class="active">For you</a>
+      <a href="#personal-photos">Collections</a>
+      <a href="#birthday-arcade">Games</a>
+      <a href="#birthday-music">Music</a>
+      <a href="#birthday-wish">Make a wish</a>
+      <button type="button" data-open-letter>A little note</button>
+    </nav>
+    <div class="header-right">
+      <button type="button" id="my-list-button" class="my-list-button" aria-label="My list"><svg class="icon" aria-hidden="true"><use href="#i-bookmark"/></svg><span>My list<span id="saved-count"></span></span></button>
+      <span class="profile" aria-label="Made for Bhavyaa"><img src="assets/photos/frame-31.webp" alt="" width="36" height="36"></span>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-image" role="img" aria-label="Portraits from Bhavyaa’s collection"><img class="hero-photo is-current" src="assets/photos/frame-31.webp" alt="" fetchpriority="high"><img class="hero-photo" alt=""></div>
+      <div class="hero-shade"></div>
+      <div class="hero-content">
+        <div class="original-label"><span class="brand-initial">B</span><span>A BIRTHDAY ORIGINAL</span></div>
+        <p class="title-prelude">Happy birthday,</p>
+        <h1 id="hero-title">BHAVYAA<span>.</span></h1>
+        <p class="hero-edition">THE BIRTHDAY CUT</p>
+        <div class="film-meta"><span class="match">Made just for you</span><span>2026</span><span class="age-rating">27 OCT</span></div>
+        <h2>Every version of you deserves a celebration.</h2>
+        <p class="hero-description">The little smiles. The golden days. The moments that are so completely you. A birthday original, with you in every frame.</p>
+        <div class="hero-actions">
+          <button class="button button-light" type="button" id="play-special"><svg class="icon"><use href="#i-play"/></svg>Play the birthday film</button>
+          <button class="button button-glass" type="button" data-open-letter><svg class="icon"><use href="#i-envelope"/></svg>A little note</button>
+        </div>
+        <div class="hero-footnote"><span class="red-dot"></span>A 60-second original. A whole lot of you.</div>
+        <div class="hero-filmstrip" role="group" aria-label="Choose a featured portrait">
+          <button type="button" class="hero-thumb is-active" data-hero-frame="0" aria-label="Show Golden portrait" aria-pressed="true"><img src="assets/photos/frame-31.webp" alt="" width="90" height="64"><span>01</span></button>
+          <button type="button" class="hero-thumb" data-hero-frame="1" aria-label="Show In full bloom portrait" aria-pressed="false"><img src="assets/photos/frame-01.webp" alt="" width="90" height="64"><span>02</span></button>
+          <button type="button" class="hero-thumb" data-hero-frame="2" aria-label="Show After hours portrait" aria-pressed="false"><img src="assets/photos/frame-14.webp" alt="" width="90" height="64"><span>03</span></button>
+          <button type="button" class="hero-thumb" data-hero-frame="3" aria-label="Show A shade of happy portrait" aria-pressed="false"><img src="assets/photos/frame-25.webp" alt="" width="90" height="64"><span>04</span></button>
+        </div>
+      </div>
+      <div class="premiere-stamp"><span>THE BIRTHDAY EDITION</span><strong>27<span>/</span>10</strong><span>A DAY WORTH CELEBRATING</span></div>
+      <div class="hero-controls" aria-label="Featured photo controls"><span class="hero-frame-label" aria-live="off">01 / 04</span><button type="button" class="circle-button hero-frame-prev" aria-label="Previous featured photo"><svg class="icon flip"><use href="#i-chevron"/></svg></button><button type="button" class="circle-button hero-frame-toggle" aria-label="Pause featured photos"><svg class="icon"><use href="#i-pause"/></svg></button><button type="button" class="circle-button hero-frame-next" aria-label="Next featured photo"><svg class="icon"><use href="#i-chevron"/></svg></button></div>
+      <a href="#personal-photos" class="hero-scroll">35 FRAMES. ONE UNFORGETTABLE YOU.<svg class="icon"><use href="#i-arrow"/></svg></a>
+    </section>
+
+    <div id="personal-photos"></div>
+    <div id="birthday-music"></div>
+    <div id="birthday-arcade"></div>
+    <section class="episodes-section content-width" id="episodes" aria-labelledby="episodes-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">THE SEQUEL IS YOURS TO WRITE</p><h2 id="episodes-title">Here’s to your next chapter.</h2></div>
+        <div class="row-controls"><span>4 little wishes</span><button type="button" class="circle-button" id="episodes-prev" aria-label="Previous episodes"><svg class="icon flip"><use href="#i-chevron"/></svg></button><button type="button" class="circle-button" id="episodes-next" aria-label="Next episodes"><svg class="icon"><use href="#i-chevron"/></svg></button></div>
+      </div>
+      <div class="episodes-track" id="episodes-track"></div>
+      <p class="row-caption">A season full of possibility. Every episode is a wish for you.</p>
+    </section>
+
+    <div id="birthday-wish"></div>
+    <section class="extras-section content-width" aria-label="A birthday note and countdown">
+      <div class="letter-banner">
+        <div class="letter-art" aria-hidden="true"><div class="letter-paper"><span>To Bhavyaa,</span><i></i><i></i><i></i><svg class="icon"><use href="#i-heart"/></svg></div><div class="envelope-front"></div><div class="envelope-flap"></div><span class="envelope-seal">B</span></div>
+        <div class="letter-teaser"><p class="eyebrow">STAY FOR THE POST-CREDITS SCENE</p><h2>One more thing.<br>Just between us.</h2><p>Some things are better said in a letter.</p><button type="button" class="text-button" data-open-letter>Open your letter <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+      </div>
+      <div class="countdown-panel">
+        <p class="eyebrow" id="countdown-eyebrow">THE COUNTDOWN TO YOUR DAY</p>
+        <div class="countdown" id="countdown" role="timer" aria-label="Time until Bhavyaa’s birthday"><div><strong id="count-days">00</strong><span>DAYS</span></div><b>:</b><div><strong id="count-hours">00</strong><span>HOURS</span></div><b>:</b><div><strong id="count-minutes">00</strong><span>MINS</span></div><b>:</b><div><strong id="count-seconds">00</strong><span>SECS</span></div></div>
+        <p class="countdown-date" id="countdown-date">27 October 2026 <span>·</span> Midnight, India time</p>
+        <div class="countdown-rule"></div><p class="countdown-wish" id="countdown-wish">Here’s to the good things you haven’t met yet.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer content-width"><a class="wordmark" href="#home" aria-label="Back to Bhavyaa’s birthday edition">BHAVYAA<span class="brand-period">.</span></a><p>Every story has a main character.<br>This one has you.</p><span>FOR BHAVYAA · 27 OCTOBER <svg class="icon"><use href="#i-heart"/></svg></span></footer>
+
+  <dialog id="story-dialog" class="story-dialog" aria-labelledby="story-title">
+    <div class="story-view" id="story-view">
+      <img id="story-image" class="story-image" alt="">
+      <div class="story-overlay"></div>
+      <div class="story-top"><span class="original-label"><span class="brand-initial">B</span>YOUR BIRTHDAY SPECIAL</span><button type="button" class="circle-button close-button" data-close="story-dialog" aria-label="Close birthday special"><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <div class="story-progress" id="story-progress" aria-hidden="true"></div>
+      <div class="story-copy"><p class="eyebrow" id="story-eyebrow"></p><h2 id="story-title"></h2><p id="story-body"></p></div>
+      <div class="story-bottom"><button type="button" class="circle-button" id="story-prev" aria-label="Previous wish"><svg class="icon flip"><use href="#i-chevron"/></svg></button><button type="button" class="circle-button" id="story-pause" aria-label="Pause birthday special"><svg class="icon"><use href="#i-pause"/></svg></button><span id="story-position"></span><button type="button" class="text-button story-next" id="story-next">Next wish <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+    </div>
+  </dialog>
+
+  <dialog id="letter-dialog" class="letter-dialog" aria-labelledby="letter-title"><button type="button" class="circle-button close-button" data-close="letter-dialog" aria-label="Close letter"><svg class="icon"><use href="#i-close"/></svg></button><div class="letter-dialog-inner"><p class="eyebrow">27 OCTOBER 2026 · A LITTLE NOTE</p><h2 id="letter-title">Dear Bhavyaa,</h2><div id="letter-body"></div><p class="letter-signoff">Wishing you only good things,<br><span>Someone cheering you on.</span></p><div class="letter-end"><svg class="icon"><use href="#i-heart"/></svg><span>HAPPY BIRTHDAY, BHAVYAA.</span></div></div></dialog>
+
+  <dialog id="list-dialog" class="list-dialog" aria-labelledby="list-title"><button type="button" class="circle-button close-button" data-close="list-dialog" aria-label="Close my list"><svg class="icon"><use href="#i-close"/></svg></button><p class="eyebrow">A LITTLE GOOD TO KEEP</p><h2 id="list-title">My list</h2><div id="saved-items"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript-message">Happy birthday, Bhavyaa! Wishing you a year full of joy, good people, and new adventures. Enable JavaScript to open your birthday special and letter.</p></noscript>
+</body>
+</html>

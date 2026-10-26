@@ -1,0 +1,10 @@
+{
+  "name": "bhavyaa-birthday",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "check": "node --check dist/app.js && node --check dist/content.js && node --check dist/photos.js && node --check dist/gallery.js && node --check dist/cinema.js && node --check dist/premium.js && node --check dist/wish.js && node --check dist/music.js && node --check dist/music-data.js && node --check dist/arcade.js && node --check server.mjs"
+  }
+}
