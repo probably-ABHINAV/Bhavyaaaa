@@ -114,6 +114,10 @@
 @media(prefers-reduced-motion:reduce){.hero-photo,.hero-thumb,.hero-thumb img,.hero-thumb:after,.gallery-poster,.gallery-poster-image,.site-footer .wordmark{transition:none!important}.hero-thumb:hover,.hero-photo,.hero-photo.is-current,.gallery-poster:hover .gallery-poster-image{transform:none}.hero-thumb:hover{transform:none}}
 
 /* Clear section orientation and readable supporting copy on phones. */
+.hindi-copy{font-family:'Birthday Hindi','Nirmala UI',serif;font-weight:400;font-style:normal;letter-spacing:0;line-height:1.8}
+.hero-footnote.hindi-copy{font-size:18px;line-height:1.8;color:#d8bfa8;gap:10px}
+.hero-footnote.hindi-copy .red-dot{align-self:center;margin-top:0;flex-shrink:0}
+.letter-teaser>p.hindi-copy:not(.eyebrow){font-size:18px;line-height:1.8;color:#dbc5b2;max-width:340px}
 .birthday-today .film-meta .match{color:#f0d4a7}
 .birthday-today .film-meta .match::before{content:'';display:inline-block;width:5px;height:5px;margin:0 7px 2px 0;border-radius:50%;background:#ec4555;box-shadow:0 0 11px #ec455533;vertical-align:middle}
 .main-nav a[aria-current='location']{color:#fff2e3}
@@ -125,6 +129,8 @@
   .film-meta{flex-wrap:wrap;row-gap:7px;font-size:10px}
   .film-meta .match{font-size:10px}
   .hero-footnote{font-size:10px;letter-spacing:0;line-height:1.6}
+  .hero-footnote.hindi-copy{font-size:16px;line-height:1.8;margin-top:12px}
+  .hero-footnote.hindi-copy+.hero-filmstrip{margin-top:16px}
   .hero-thumb>span,.premiere-stamp>span,.wish-art-caption{display:none}
   .hero-frame-label{font-size:10px;letter-spacing:.8px}
   .hero-scroll{font-size:10px;line-height:1.5;letter-spacing:.2px}
@@ -139,6 +145,7 @@
   .wish-response-text{font-size:12px;line-height:1.6}
   .letter-teaser .eyebrow{font-size:10px;letter-spacing:1.1px;line-height:1.7}
   .letter-teaser>p:not(.eyebrow){font-size:12px;line-height:1.8}
+  .letter-teaser>p.hindi-copy:not(.eyebrow){font-size:17px;line-height:1.8;max-width:100%}
   .letter-teaser .text-button{font-size:12px}
   .countdown-panel .eyebrow,.countdown div span,.countdown-date{font-size:10px;letter-spacing:.8px}
   .site-footer p{font-size:11px;max-width:none}

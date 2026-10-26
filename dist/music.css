@@ -11,3 +11,5 @@
 @media(max-width:360px){.music-intro h2{font-size:35px;max-width:235px}.music-record{width:66px;height:66px;right:3px;top:39px}.music-needle{height:45px;right:8px}.music-description{max-width:240px;padding-right:0}.music-console,.music-library{padding:19px 13px}.music-library-heading h3{font-size:23px}.music-selected-title{font-size:20px}.music-player-controls{gap:6px}.music-position{font-size:9px;letter-spacing:.3px}.music-surprise{padding-inline:9px;font-size:10px}.music-step{min-width:44px;width:44px}.music-track{gap:8px}.music-track-cover{width:32px;height:32px}.music-track-copy strong{font-size:13px}.music-track-symbol{font-size:14px}.music-track-copy small{font-size:11px}.music-moods button{font-size:10px;padding-inline:11px}}
 @media(prefers-reduced-motion:reduce){.music-track{transition:none}}
 @media(pointer:coarse){.music-search{font-size:16px}}
+.music-hindi{max-width:460px;font-size:18px;line-height:1.9;color:#d9bba0;border-left:1px solid #b793704d;padding-left:16px;margin:20px 0 0}
+@media(max-width:600px){.music-hindi{font-size:17px;max-width:300px;padding-left:12px;margin-top:21px}}

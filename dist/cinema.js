@@ -136,7 +136,7 @@
       { kind: 'triptych', label: '04 / A LITTLE ADVENTURE', kicker: 'A LITTLE ADVENTURE', title: 'Say yes to <em>wonder.</em>', copy: 'Here’s to days that surprise you in the best possible way.', images: [picked(3, 0, 8), picked(3, 1, 11), picked(3, 2, 12)] },
       { kind: 'portrait', label: '05 / ROOM TO BLOOM', kicker: 'AT YOUR OWN PACE', title: 'Keep becoming.<br>Keep <em>blooming.</em>', copy: 'May this next chapter give you room to grow,<br>and plenty of moments to simply be.', images: [picked(4, 0, 30)] },
       { kind: 'diptych cinema-night', label: '06 / ALL THE GOOD THINGS', kicker: 'A WISH FOR THE YEAR AHEAD', title: 'A softer life.<br>A brighter <em>year.</em>', copy: 'Good company. Peace of mind.<br>And so many reasons to look forward.', images: [picked(5, 0, 16), picked(5, 1, 24)] },
-      { kind: 'closing', label: 'THE NEXT CHAPTER', kicker: '27 OCTOBER · THIS DAY IS YOURS', title: `Happy birthday,<br><em>${name}.</em>`, copy: 'Here’s to everything still to come.', images: [photo(0)] }
+      { kind: 'closing', label: 'THE NEXT CHAPTER', kicker: '27 OCTOBER · THIS DAY IS YOURS', title: `Happy birthday,<br><em>${name}.</em>`, copy: 'Here’s to everything still to come.<span class="hindi-copy" lang="hi">तुम्हारी मुस्कान यूँ ही बनी रहे।</span>', images: [photo(0)] }
     ];
     const photoMarkup = (item, index) => `<div class="cinema-photo cinema-photo-${index}"><img src="${escape(item.image)}" alt="${escape(item.title)}" style="object-position:${escape(item.position)}" decoding="async" draggable="false"></div>`;
     stage.innerHTML = scenes.map((scene, index) => `<section class="cinema-scene cinema-${scene.kind}" data-scene="${index}" aria-hidden="true" style="--scene-duration:${durations[index]}s">

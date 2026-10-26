@@ -89,7 +89,7 @@
   const birthdayStart = new Date(window.BIRTHDAY.birthday).getTime();
   const birthdayEnd = birthdayStart + 86400000;
   const birthdayGreeting = document.querySelector('.film-meta .match');
-  const letterTeaser = document.querySelector('.letter-teaser > p:not(.eyebrow)');
+  const letterTeaser = document.querySelector('.letter-teaser > p:not(.eyebrow):not([lang="hi"])');
   const ordinaryGreeting = birthdayGreeting?.textContent;
   const ordinaryLetterTeaser = letterTeaser?.textContent;
   const recipient = window.BIRTHDAY.name || 'Bhavyaa';

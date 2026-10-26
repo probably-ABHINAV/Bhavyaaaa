@@ -28,3 +28,4 @@ Edit `dist/content.js` for the name, date, wishes, and letter. Edit `dist/photos
 This import includes still-image posts accessed through the supplied profile. It does not include reels, stories, or highlights. Rights remain with the original creators; see `asset-sources.md`.
 
 For Vercel deployment, follow `DEPLOY-VERCEL.md`. The supplied `vercel.json` publishes the `dist` directory. The existing ChatGPT Sites preview is owner-private; a separate Vercel deployment has its own access settings.
+`dist/fonts.css` defines the self-hosted Hindi typeface. Original Hindi wishes appear in the hero, song collection, birthday letter teaser, and film closing.

@@ -52,3 +52,7 @@ The font redistribution licenses are included in dist/assets/fonts/licenses.
 Khat — Navjot Ahuja. Verified through Spotify catalog metadata; embedded using Spotify's official iFrame API. Full catalog link: https://open.spotify.com/track/3gixnmepHSsyAuho34rprN?utm_source=openai&utm_medium=chatgpt&go=1&nap_web=1&request_id=44c3cbfe-54b4-42fe-bbbc-ebf60ded0b2d
 
 The film requests playback only after a listener action. Availability, previews and sign-in are controlled by Spotify. No music file is downloaded or bundled. Official API documentation: https://developer.spotify.com/documentation/embeds/references/iframe-api
+
+### Hindi typography and copy
+
+The short Hindi birthday wishes are original site copy, not song lyrics or attributed quotations. Noto Serif Devanagari (regular Devanagari WOFF2 subset) is self-hosted under the SIL Open Font License 1.1; see `dist/assets/fonts/licenses/notoserifdevanagari-OFL.txt`. Font source: https://fonts.google.com/noto/specimen/Noto+Serif+Devanagari and https://github.com/google/fonts/tree/main/ofl/notoserifdevanagari.
